@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>해준이의 성장과정</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --bg: #fffdfb;
+    --bg-soft: #fff7f2;
+    --card: #ffffff;
+    --ink: #4a4038;
+    --ink-soft: #8a7f74;
+    --pink: #ffc9d4;
+    --pink-deep: #ff9fb3;
+    --mint: #bdeee0;
+    --mint-deep: #7fd9bd;
+    --blue: #cfe8ff;
+    --blue-deep: #9fceff;
+    --yellow: #ffe9ad;
+    --shadow: 0 12px 30px rgba(180, 150, 130, 0.12);
+    --shadow-sm: 0 6px 16px rgba(180, 150, 130, 0.10);
+    --radius: 22px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  [hidden]{ display: none !important; }
+  body{
+    margin:0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5{ font-family: inherit; margin:0; font-weight:700; }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; margin:0; padding:0; }
+  button, input, textarea{ font-family:inherit; font-size:1rem; }
+
+  /* ---------- Fade Up Animation ---------- */
+  .fade-up{
+    opacity:0;
+    transform: translateY(36px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.in-view{
+    opacity:1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position: sticky;
+    top:0;
+    z-index: 100;
+    background: rgba(255, 253, 251, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(180,150,130,0.08);
+    transition: box-shadow 0.3s ease;
+  }
+  .site-header.scrolled{ box-shadow: 0 6px 20px rgba(180,150,130,0.12); }
+  .header-inner{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-size: 1.4rem;
+    color: var(--pink-deep);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .site-nav{ display:flex; gap: 22px; }
+  .nav-link{
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    padding: 8px 4px;
+    position:relative;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .nav-link::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0%; height:2px;
+    background: var(--pink-deep);
+    transition: width 0.25s ease;
+  }
+  .nav-link:hover{ color: var(--ink); }
+  .nav-link:hover::after, .nav-link.active::after{ width:100%; }
+  .nav-link.active{ color: var(--pink-deep); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    overflow:hidden;
+    padding: 110px 24px 90px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height: 100vh;
+    min-height: 100svh;
+    transition: height 0.9s ease, min-height 0.9s ease, padding 0.9s ease;
+    background:
+      radial-gradient(circle at 12% 20%, var(--pink) 0%, transparent 40%),
+      radial-gradient(circle at 88% 15%, var(--blue) 0%, transparent 38%),
+      radial-gradient(circle at 50% 100%, var(--mint) 0%, transparent 45%);
+  }
+  .hero-photo-wrap{
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    overflow:hidden;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 6px solid rgba(255,255,255,0.55);
+    box-shadow: var(--shadow);
+    opacity:0;
+    transform: scale(0.7);
+    animation: heroPhotoIn 1s ease 0.15s forwards;
+  }
+  .hero-photo-wrap img{ width:100%; height:100%; object-fit:cover; opacity:0.92; }
+  @keyframes heroPhotoIn{
+    to{ opacity:1; transform:scale(1); }
+  }
+  .hero-decor{
+    position:absolute;
+    font-size: 2rem;
+    opacity:0.55;
+    animation: float 6s ease-in-out infinite;
+    user-select:none;
+    pointer-events:none;
+  }
+  .hero-decor.d1{ top: 18%; left: 8%; animation-delay: 0s; }
+  .hero-decor.d2{ top: 65%; left: 14%; animation-delay: 1.2s; font-size:1.5rem; }
+  .hero-decor.d3{ top: 22%; right: 10%; animation-delay: 0.6s; }
+  .hero-decor.d4{ top: 70%; right: 12%; animation-delay: 1.8s; font-size:1.6rem; }
+  @keyframes float{
+    0%, 100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-16px) rotate(8deg); }
+  }
+  .hero-content{ position:relative; z-index:2; max-width: 720px; margin: 0 auto; }
+  .hero-content.hero-exit{
+    opacity:0 !important;
+    transform: translateY(-24px) scale(0.97) !important;
+    transition: opacity 0.7s ease, transform 0.7s ease !important;
+  }
+  .hero-eyebrow{
+    display:inline-block;
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    color: var(--pink-deep);
+    background: #fff;
+    padding: 6px 16px;
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 22px;
+  }
+  .hero-title{
+    font-size: clamp(1.8rem, 4.4vw, 3rem);
+    color: var(--ink);
+    line-height:1.4;
+    margin-bottom: 18px;
+  }
+  .hero-title .highlight{
+    color: var(--pink-deep);
+  }
+  .hero-sub{
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    margin-bottom: 34px;
+  }
+  .btn-primary{
+    display:inline-block;
+    background: linear-gradient(135deg, var(--pink-deep), #ffb4c6);
+    color:#fff;
+    padding: 14px 34px;
+    border-radius: 999px;
+    font-size: 1rem;
+    box-shadow: 0 10px 24px rgba(255,159,179,0.4);
+    border:none;
+    cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(255,159,179,0.5);
+  }
+  .btn-primary:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+  /* ---------- Sections generic ---------- */
+  section{ padding: 70px 24px; }
+  .section-inner{ max-width: 920px; margin:0 auto; }
+  .section-title{
+    text-align:center;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .section-sub{
+    text-align:center;
+    color: var(--ink-soft);
+    margin-bottom: 46px;
+    font-size: 0.98rem;
+  }
+
+  /* ---------- Add Entry Form ---------- */
+  .add-entry{ background: var(--bg-soft); }
+  .entry-form{
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow);
+  }
+  .form-row{ margin-bottom: 22px; display:flex; flex-direction:column; gap:8px; }
+  .form-row label{
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .form-row input[type="date"],
+  .form-row input[type="text"],
+  .form-row textarea{
+    border: 1.5px solid #f0e4de;
+    border-radius: 14px;
+    padding: 12px 16px;
+    background: #fffefd;
+    color: var(--ink);
+    outline:none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .form-row input:focus, .form-row textarea:focus{
+    border-color: var(--pink-deep);
+    box-shadow: 0 0 0 4px rgba(255,159,179,0.14);
+  }
+  .form-row textarea{ min-height: 110px; resize: vertical; }
+  .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* Cover (대표 사진) upload */
+  .cover-upload{
+    position:relative;
+    border: 2px dashed #f0cdd8;
+    border-radius: 18px;
+    min-height: 190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    overflow:hidden;
+    background: #fff9f9;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .cover-upload:hover{ border-color: var(--pink-deep); background:#fff2f5; }
+  .cover-placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    color: var(--pink-deep);
+    text-align:center;
+    padding: 20px;
+  }
+  .cover-placeholder .icon{ font-size:1.8rem; }
+  .cover-placeholder span:last-child{ font-size:0.92rem; color:#c98a9a; }
+  .cover-upload img{
+    width:100%; height:100%;
+    object-fit: cover;
+    position:absolute; inset:0;
+  }
+
+  /* Attachments (첨부파일) - hover reveal */
+  .attach-upload{
+    position:relative;
+    border: 2px dashed #cdeadf;
+    border-radius: 18px;
+    min-height: 190px;
+    background: #f6fffb;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .attach-upload:hover{ border-color: var(--mint-deep); background:#eefdf7; }
+  .attach-trigger{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    color: var(--mint-deep);
+    text-align:center;
+    padding:20px;
+    transition: opacity 0.2s ease;
+  }
+  .attach-trigger .icon{ font-size:1.8rem; }
+  .attach-trigger span:last-child{ font-size:0.9rem; color:#5fae94; }
+  .attach-trigger .count-badge{
+    margin-top:4px;
+    background: var(--mint-deep);
+    color:#fff;
+    font-size:0.78rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+  }
+  .attach-hover-panel{
+    position:absolute; inset:0;
+    background: rgba(246,255,251,0.97);
+    display:flex;
+    flex-wrap:wrap;
+    align-content:flex-start;
+    gap:8px;
+    padding:14px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.25s ease;
+    overflow-y:auto;
+  }
+  .attach-upload.has-files:hover .attach-hover-panel,
+  .attach-upload.force-open .attach-hover-panel{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .attach-upload.has-files:hover .attach-trigger{ opacity:0; }
+  .attach-thumb{
+    width: 64px; height:64px;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow: var(--shadow-sm);
+    flex-shrink:0;
+  }
+  .attach-thumb img{ width:100%; height:100%; object-fit:cover; }
+
+  /* ---------- Archive (연도 / 월 / 일 네비게이션) ---------- */
+  .archive-section{ background: var(--bg); min-height: 60vh; }
+  .archive-breadcrumb{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom: 32px;
+    flex-wrap:wrap;
+  }
+  .crumb-back{
+    background:#fff;
+    border:1px solid #f0e4de;
+    border-radius:999px;
+    padding:8px 18px;
+    font-size:0.85rem;
+    cursor:pointer;
+    color: var(--ink-soft);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .crumb-back:hover{ border-color: var(--pink-deep); color: var(--pink-deep); }
+  .crumb-current{ font-size:1.3rem; color: var(--ink); }
+
+  .year-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  .year-card{
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 34px 20px;
+    text-align:center;
+    box-shadow: var(--shadow-sm);
+    cursor:pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .year-card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--pink); }
+  .year-card .year-num{ font-size:2rem; color: var(--pink-deep); }
+  .year-card .year-count{ margin-top:8px; font-size:0.85rem; color: var(--ink-soft); }
+
+  .month-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 14px;
+  }
+  .month-cell{
+    background: var(--card);
+    border-radius: 16px;
+    padding: 22px 8px;
+    text-align:center;
+    box-shadow: var(--shadow-sm);
+    cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .month-cell:hover{ transform: translateY(-3px); box-shadow: var(--shadow); }
+  .month-cell.empty{ opacity:0.5; }
+  .month-cell .m-num{ font-size:1.25rem; color: var(--ink); }
+  .month-cell .m-count{ font-size:0.72rem; color: var(--ink-soft); margin-top:6px; }
+
+  .entries-list{ display:flex; flex-direction:column; gap: 46px; }
+
+  .entry-card{
+    display:grid;
+    grid-template-columns: 96px 1fr;
+    gap: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  .entry-date-badge{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(160deg, var(--pink), var(--yellow));
+    border-radius: 16px;
+    padding: 14px 6px;
+    height: fit-content;
+    color:#7a5142;
+  }
+  .entry-date-badge .day{ font-size:1.7rem; font-weight:700; line-height:1; }
+  .entry-date-badge .month-year{ font-size:0.75rem; margin-top:6px; opacity:0.85; }
+  .entry-date-badge .weekday{ font-size:0.7rem; margin-top:2px; opacity:0.7; }
+
+  .entry-header{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .entry-title{ font-size: 1.25rem; color: var(--ink); margin-bottom:6px; }
+  .entry-delete{
+    font-size:0.78rem;
+    color:#c9b8b8;
+    border:1px solid #f0e4de;
+    padding:4px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    background:#fff;
+    flex-shrink:0;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .entry-delete:hover{ color:#e0607a; border-color:#f3c3ce; }
+
+  .entry-text{ color: var(--ink-soft); margin: 10px 0 18px; white-space:pre-wrap; }
+
+  .entry-cover{
+    border-radius: 16px;
+    overflow:hidden;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .entry-cover img{ width:100%; max-height:420px; object-fit:cover; cursor:pointer; }
+  .entry-cover.empty{
+    display:flex; align-items:center; justify-content:center;
+    min-height:120px;
+    background: #fbf3ef;
+    color:#cbb6ad;
+    font-size:0.9rem;
+  }
+
+  .entry-attach{
+    position:relative;
+    display:inline-block;
+    margin-bottom: 18px;
+  }
+  .attach-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background: var(--mint);
+    color:#3f8a6e;
+    font-size:0.85rem;
+    padding: 7px 16px;
+    border-radius: 999px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .attach-gallery{
+    position:absolute;
+    top: calc(100% + 8px);
+    left:0;
+    z-index: 20;
+    background:#fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    width: max-content;
+    max-width: 320px;
+    opacity:0;
+    transform: translateY(-6px);
+    pointer-events:none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .entry-attach:hover .attach-gallery,
+  .entry-attach.open .attach-gallery{
+    opacity:1;
+    transform: translateY(0);
+    pointer-events:auto;
+  }
+  .attach-gallery img{
+    width:72px; height:72px;
+    object-fit:cover;
+    border-radius:10px;
+    cursor:pointer;
+    transition: transform 0.15s ease;
+  }
+  .attach-gallery img:hover{ transform: scale(1.05); }
+
+  .entry-comments{
+    border-top: 1px dashed #f0e4de;
+    padding-top: 18px;
+    margin-top: 6px;
+  }
+  .entry-comments h5{
+    font-size:0.95rem;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    font-weight:700;
+  }
+  .comment-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+  .comment-list li{
+    background: #fbf7f4;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size:0.92rem;
+  }
+  .comment-list .c-name{ color: var(--pink-deep); font-weight:bold; margin-right:6px; }
+  .comment-list .c-date{ float:right; color:#c7bab2; font-size:0.75rem; }
+  .comment-empty{ color:#cbb6ad; font-size:0.88rem; margin-bottom:14px; }
+  .comment-form{ display:flex; gap:8px; flex-wrap:wrap; }
+  .comment-form input{
+    border:1.5px solid #f0e4de;
+    border-radius: 999px;
+    padding: 9px 16px;
+    outline:none;
+    background:#fffefd;
+  }
+  .comment-form input:focus{ border-color: var(--pink-deep); }
+  .comment-form .c-name-input{ flex: 0 0 110px; }
+  .comment-form .c-text-input{ flex: 1 1 180px; }
+  .comment-form button{
+    background: var(--pink-deep);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    padding: 9px 20px;
+    cursor:pointer;
+    transition: background 0.2s ease;
+  }
+  .comment-form button:hover{ background:#ff8aa2; }
+
+  .empty-state{
+    text-align:center;
+    color:#cbb6ad;
+    padding: 40px 20px;
+    background:#fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0;
+    background: rgba(30,20,20,0.82);
+    display:none; align-items:center; justify-content:center;
+    z-index: 999;
+    padding: 30px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:88vh; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .lightbox-close{
+    position:absolute; top:22px; right:28px;
+    background:none; border:none;
+    color:#fff; font-size:2rem; cursor:pointer;
+    line-height:1;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:30px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color:#fff;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size:0.92rem;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- Footer ---------- */
+  footer{
+    text-align:center;
+    padding: 44px 24px 60px;
+    color: var(--ink-soft);
+    font-size:0.88rem;
+    background: var(--bg-soft);
+  }
+  footer .heart{ color: var(--pink-deep); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px){
+    .header-inner{ padding: 12px 16px; }
+    .logo{ font-size: 1.15rem; }
+    .site-nav{ gap:12px; }
+    .nav-link{ font-size:0.85rem; }
+    .hero{ padding: 80px 18px 60px; }
+    section{ padding: 48px 16px; }
+    .two-col{ grid-template-columns: 1fr; }
+    .entry-form{ padding: 22px; }
+    .entry-card{ grid-template-columns: 1fr; }
+    .entry-date-badge{ flex-direction:row; justify-content:flex-start; gap:8px; padding:10px 14px; }
+    .entry-date-badge .day{ font-size:1.2rem; }
+    .attach-gallery{ max-width: 240px; }
+    .year-card{ padding:26px 14px; }
+    .hero-photo-wrap{ width:200px; height:200px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <h1 class="logo">🌱 해준이의 성장과정</h1>
+    <nav class="site-nav">
+      <button type="button" class="nav-link active" data-page="home">홈</button>
+      <button type="button" class="nav-link" data-page="archive">기록보관함</button>
+    </nav>
+  </div>
+</header>
+
+<div id="page-home" class="page">
+  <section id="hero" class="hero">
+    <span class="hero-decor d1">🍼</span>
+    <span class="hero-decor d2">⭐</span>
+    <span class="hero-decor d3">🧸</span>
+    <span class="hero-decor d4">🌈</span>
+    <div class="hero-content fade-up" id="hero-content">
+      <div class="hero-photo-wrap">
+        <img src="해준-1490-2.jpg" alt="해준이 사진">
+      </div>
+      <span class="hero-eyebrow">HAEJUN'S GROWTH DIARY</span>
+      <h2 class="hero-title">해준이의 홈페이지에<br><span class="highlight">온 것을 환영합니다.</span></h2>
+      <p class="hero-sub">태어난 순간부터 오늘까지, 해준이의 소중한 성장 이야기를 하루하루 기록합니다.</p>
+      <a href="#add-entry" class="btn-primary" id="hero-skip">오늘의 기록 남기기 ✏️</a>
+    </div>
+  </section>
+
+  <section id="add-entry" class="add-entry">
+    <div class="section-inner">
+      <h3 class="section-title fade-up">새로운 기록 남기기</h3>
+      <p class="section-sub fade-up">매일매일, 해준이의 순간을 날짜별로 차곡차곡 남겨보세요. 저장하면 기록보관함에 바로 반영돼요.</p>
+
+      <form id="entry-form" class="entry-form fade-up">
+        <div class="form-row">
+          <label for="entry-date">📅 날짜</label>
+          <input type="date" id="entry-date" required>
+        </div>
+        <div class="form-row">
+          <label for="entry-title">📝 제목</label>
+          <input type="text" id="entry-title" placeholder="예: 오늘, 해준이의 이야기">
+        </div>
+        <div class="form-row">
+          <label for="entry-text">💌 이야기</label>
+          <textarea id="entry-text" placeholder="오늘 있었던 소중한 순간을 자유롭게 적어주세요."></textarea>
+        </div>
+
+        <div class="form-row two-col">
+          <div>
+            <label style="margin-bottom:8px;">🖼️ 대표 사진</label>
+            <div class="cover-upload" id="cover-upload">
+              <input type="file" id="cover-input" accept="image/*" hidden>
+              <div class="cover-placeholder" id="cover-placeholder">
+                <span class="icon">📷</span>
+                <span id="cover-placeholder-text">대표 사진을 여기에 넣어주세요</span>
+              </div>
+              <img id="cover-preview" hidden alt="대표 사진 미리보기">
+            </div>
+          </div>
+          <div>
+            <label style="margin-bottom:8px;">📎 첨부파일 (여러 장 가능 · 마우스를 올리면 보여요)</label>
+            <div class="attach-upload" id="attach-upload">
+              <input type="file" id="attach-input" accept="image/*" multiple hidden>
+              <div class="attach-trigger" id="attach-trigger">
+                <span class="icon">📎</span>
+                <span>클릭해서 사진 첨부하기</span>
+              </div>
+              <div class="attach-hover-panel" id="attach-hover-panel"></div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%; border:none;">기록 저장하기 💛</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<div id="page-archive" class="page" hidden>
+  <section class="archive-section">
+    <div class="section-inner">
+      <h3 class="section-title fade-up">우리 해준이의 이야기</h3>
+      <p class="section-sub fade-up">연도와 달을 눌러 그날의 기록을 찾아보세요.</p>
+      <div class="archive-breadcrumb" id="archive-breadcrumb"></div>
+      <div id="archive-view"></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>with <span class="heart">♥</span> for 해준이, 평생 간직할 우리들의 기록</p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <img id="lightbox-img" alt="첨부 이미지 크게 보기">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= IndexedDB storage layer ================= */
+  const DB_NAME = "haejunDiaryDB";
+  const DB_VERSION = 1;
+  const STORE_NAME = "entries";
+  let dbPromise = null;
+
+  function getDB(){
+    if(dbPromise) return dbPromise;
+    dbPromise = new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if(!db.objectStoreNames.contains(STORE_NAME)){
+          db.createObjectStore(STORE_NAME, { keyPath: "id" });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+    return dbPromise;
+  }
+
+  async function dbGetAllEntries(){
+    const db = await getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const req = tx.objectStore(STORE_NAME).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function dbPutEntry(entry){
+    const db = await getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).put(entry);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function dbDeleteEntry(id){
+    const db = await getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  /* ================= Image compression ================= */
+  function compressImage(file, maxDim, quality){
+    maxDim = maxDim || 1600;
+    quality = quality || 0.82;
+    return new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if(width > maxDim || height > maxDim){
+          if(width > height){
+            height = Math.round(height * (maxDim / width));
+            width = maxDim;
+          }else{
+            width = Math.round(width * (maxDim / height));
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(objectUrl);
+        canvas.toBlob((blob) => {
+          if(blob) resolve(blob); else reject(new Error("compress failed"));
+        }, "image/jpeg", quality);
+      };
+      img.onerror = (err) => { URL.revokeObjectURL(objectUrl); reject(err); };
+      img.src = objectUrl;
+    });
+  }
+
+  async function processImageFile(file){
+    try{
+      return await compressImage(file);
+    }catch(err){
+      console.warn("이미지 압축 실패, 원본으로 저장합니다.", err);
+      return file;
+    }
+  }
+
+  /* ================= App state ================= */
+  let entries = [];
+  let archiveState = { view: "years", year: null, month: null };
+
+  const dateInput = document.getElementById("entry-date");
+  dateInput.value = new Date().toISOString().slice(0,10);
+
+  function formatBadge(dateStr){
+    const d = new Date(dateStr + "T00:00:00");
+    if(isNaN(d)) return { day: "?", my: "", wd: "" };
+    const weekdays = ["일","월","화","수","목","금","토"];
+    return {
+      day: String(d.getDate()).padStart(2,"0"),
+      my: `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}`,
+      wd: weekdays[d.getDay()] + "요일"
+    };
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement("div");
+    div.textContent = str || "";
+    return div.innerHTML;
+  }
+
+  function showToast(msg){
+    const toastEl = document.getElementById("toast");
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toastEl.classList.remove("show"), 2600);
+  }
+
+  /* ================= Cover upload (form) ================= */
+  const coverUpload = document.getElementById("cover-upload");
+  const coverInput = document.getElementById("cover-input");
+  const coverPlaceholder = document.getElementById("cover-placeholder");
+  const coverPlaceholderText = document.getElementById("cover-placeholder-text");
+  const coverPreview = document.getElementById("cover-preview");
+  let pendingCoverBlob = null;
+  let pendingCoverUrl = null;
+
+  coverUpload.addEventListener("click", () => coverInput.click());
+  coverInput.addEventListener("change", async () => {
+    const file = coverInput.files[0];
+    coverInput.value = "";
+    if(!file) return;
+    coverPlaceholderText.textContent = "사진을 준비하고 있어요...";
+    try{
+      const blob = await processImageFile(file);
+      pendingCoverBlob = blob;
+      if(pendingCoverUrl) URL.revokeObjectURL(pendingCoverUrl);
+      pendingCoverUrl = URL.createObjectURL(blob);
+      coverPreview.src = pendingCoverUrl;
+      coverPreview.hidden = false;
+      coverPlaceholder.hidden = true;
+    }catch(err){
+      alert("사진을 불러오지 못했어요. 다른 사진으로 시도해주세요.");
+    }finally{
+      coverPlaceholderText.textContent = "대표 사진을 여기에 넣어주세요";
+    }
+  });
+
+  /* ================= Attachments upload (form) ================= */
+  const attachUpload = document.getElementById("attach-upload");
+  const attachInput = document.getElementById("attach-input");
+  const attachTrigger = document.getElementById("attach-trigger");
+  const attachHoverPanel = document.getElementById("attach-hover-panel");
+  let pendingAttachmentBlobs = [];
+  let pendingAttachmentUrls = [];
+
+  attachUpload.addEventListener("click", (e) => {
+    if(e.target.closest(".attach-hover-panel") && attachUpload.classList.contains("has-files")) return;
+    attachInput.click();
+  });
+  attachInput.addEventListener("change", async () => {
+    const files = Array.from(attachInput.files);
+    attachInput.value = "";
+    for(const file of files){
+      try{
+        const blob = await processImageFile(file);
+        pendingAttachmentBlobs.push(blob);
+        pendingAttachmentUrls.push(URL.createObjectURL(blob));
+      }catch(err){
+        console.error(err);
+      }
+    }
+    renderPendingAttachments();
+  });
+
+  function renderPendingAttachments(){
+    attachHoverPanel.innerHTML = "";
+    if(pendingAttachmentUrls.length === 0){
+      attachUpload.classList.remove("has-files");
+      attachTrigger.innerHTML = `<span class="icon">📎</span><span>클릭해서 사진 첨부하기</span>`;
+      return;
+    }
+    attachUpload.classList.add("has-files");
+    attachTrigger.innerHTML = `<span class="icon">📎</span><span>클릭해서 더 첨부하기</span><span class="count-badge">${pendingAttachmentUrls.length}장 첨부됨</span>`;
+    pendingAttachmentUrls.forEach(src => {
+      const thumb = document.createElement("div");
+      thumb.className = "attach-thumb";
+      thumb.innerHTML = `<img src="${src}" alt="첨부 미리보기">`;
+      attachHoverPanel.appendChild(thumb);
+    });
+  }
+
+  function resetForm(){
+    document.getElementById("entry-form").reset();
+    dateInput.value = new Date().toISOString().slice(0,10);
+    if(pendingCoverUrl) URL.revokeObjectURL(pendingCoverUrl);
+    pendingCoverBlob = null;
+    pendingCoverUrl = null;
+    coverPreview.hidden = true;
+    coverPreview.src = "";
+    coverPlaceholder.hidden = false;
+    pendingAttachmentUrls.forEach(u => URL.revokeObjectURL(u));
+    pendingAttachmentBlobs = [];
+    pendingAttachmentUrls = [];
+    renderPendingAttachments();
+  }
+
+  /* ================= Form submit ================= */
+  const entryForm = document.getElementById("entry-form");
+  entryForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const date = dateInput.value;
+    if(!date){ alert("날짜를 선택해주세요."); return; }
+
+    const submitBtn = entryForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "저장 중...";
+
+    try{
+      const newEntry = {
+        id: "e-" + Date.now(),
+        date: date,
+        title: document.getElementById("entry-title").value.trim() || "오늘, 해준이의 이야기",
+        text: document.getElementById("entry-text").value.trim(),
+        cover: pendingCoverBlob,
+        attachments: pendingAttachmentBlobs.slice(),
+        comments: []
+      };
+
+      await dbPutEntry(newEntry);
+      entries.unshift(newEntry);
+      resetForm();
+
+      const d = new Date(date + "T00:00:00");
+      archiveState = { view: "days", year: d.getFullYear(), month: d.getMonth() + 1 };
+      switchPage("archive");
+      showToast("오늘의 기록이 저장되었어요! 🌱");
+    }catch(err){
+      console.error(err);
+      alert("저장 중 문제가 발생했어요. 다시 시도해주세요.");
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = "기록 저장하기 💛";
+    }
+  });
+
+  /* ================= Archive: years -> months -> days ================= */
+  const archiveBreadcrumb = document.getElementById("archive-breadcrumb");
+  const archiveViewEl = document.getElementById("archive-view");
+  let archiveObjectUrls = [];
+
+  function releaseArchiveUrls(){
+    archiveObjectUrls.forEach(u => URL.revokeObjectURL(u));
+    archiveObjectUrls = [];
+  }
+  function archiveBlobUrl(blob){
+    if(!blob) return null;
+    const url = URL.createObjectURL(blob);
+    archiveObjectUrls.push(url);
+    return url;
+  }
+
+  function entryYearMonth(entry){
+    const d = new Date(entry.date + "T00:00:00");
+    return { year: d.getFullYear(), month: d.getMonth() + 1 };
+  }
+
+  function getYearsList(){
+    const years = new Set([new Date().getFullYear()]);
+    entries.forEach(en => years.add(entryYearMonth(en).year));
+    return Array.from(years).sort((a,b) => b - a);
+  }
+
+  function countForYear(year){
+    return entries.filter(en => entryYearMonth(en).year === year).length;
+  }
+
+  function countForYearMonth(year, month){
+    return entries.filter(en => {
+      const ym = entryYearMonth(en);
+      return ym.year === year && ym.month === month;
+    }).length;
+  }
+
+  function entriesForYearMonth(year, month){
+    return entries.filter(en => {
+      const ym = entryYearMonth(en);
+      return ym.year === year && ym.month === month;
+    }).sort((a,b) => (a.date < b.date ? 1 : -1));
+  }
+
+  function buildEntryCard(entry){
+    const badge = formatBadge(entry.date);
+    const card = document.createElement("article");
+    card.className = "entry-card fade-up";
+    card.dataset.id = entry.id;
+
+    const coverUrl = archiveBlobUrl(entry.cover);
+    const coverHtml = coverUrl
+      ? `<div class="entry-cover"><img src="${coverUrl}" alt="${escapeHtml(entry.title)} 대표 사진" class="lightbox-trigger" data-src="${coverUrl}"></div>`
+      : `<div class="entry-cover empty">대표 사진이 아직 없어요</div>`;
+
+    const attachUrls = (entry.attachments || []).map(b => archiveBlobUrl(b));
+    const attachHtml = attachUrls.length
+      ? `<div class="entry-attach">
+           <span class="attach-badge">📎 첨부파일 ${attachUrls.length}장 (마우스를 올려보세요)</span>
+           <div class="attach-gallery">
+             ${attachUrls.map(src => `<img src="${src}" class="lightbox-trigger" data-src="${src}" alt="첨부 이미지">`).join("")}
+           </div>
+         </div>`
+      : "";
+
+    const hasComments = entry.comments && entry.comments.length > 0;
+    const commentItemsHtml = hasComments
+      ? entry.comments.map(c => `<li><span class="c-date">${escapeHtml(c.date)}</span><span class="c-name">${escapeHtml(c.name)}</span>${escapeHtml(c.text)}</li>`).join("")
+      : "";
+    const commentEmptyHtml = hasComments
+      ? ""
+      : `<p class="comment-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</p>`;
+
+    card.innerHTML = `
+      <div class="entry-date-badge">
+        <span class="day">${badge.day}</span>
+        <span class="month-year">${badge.my}</span>
+        <span class="weekday">${badge.wd}</span>
+      </div>
+      <div class="entry-body">
+        <div class="entry-header">
+          <h4 class="entry-title">${escapeHtml(entry.title)}</h4>
+          <button class="entry-delete" data-action="delete">삭제</button>
+        </div>
+        <p class="entry-text">${escapeHtml(entry.text)}</p>
+        ${coverHtml}
+        ${attachHtml}
+        <div class="entry-comments">
+          <h5>💬 댓글 ${entry.comments ? entry.comments.length : 0}개</h5>
+          <ul class="comment-list">${commentItemsHtml}</ul>
+          ${commentEmptyHtml}
+          <form class="comment-form" data-action="comment">
+            <input type="text" class="c-name-input" placeholder="이름" required>
+            <input type="text" class="c-text-input" placeholder="댓글을 남겨주세요" required>
+            <button type="submit">등록</button>
+          </form>
+        </div>
+      </div>
+    `;
+    return card;
+  }
+
+  function renderArchive(){
+    releaseArchiveUrls();
+
+    if(archiveState.view === "years"){
+      archiveBreadcrumb.innerHTML = `<span class="crumb-current">📚 기록보관함</span>`;
+      const years = getYearsList();
+      archiveViewEl.innerHTML = `<div class="year-grid">${years.map(y => `
+        <div class="year-card fade-up" data-nav="year" data-year="${y}">
+          <div class="year-num">${y}년</div>
+          <div class="year-count">${countForYear(y)}개의 기록</div>
+        </div>`).join("")}</div>`;
+
+    }else if(archiveState.view === "months"){
+      archiveBreadcrumb.innerHTML = `
+        <button type="button" class="crumb-back" data-nav="years">← 연도 선택</button>
+        <span class="crumb-current">${archiveState.year}년</span>`;
+      const cells = [];
+      for(let m = 1; m <= 12; m++){
+        const count = countForYearMonth(archiveState.year, m);
+        cells.push(`<div class="month-cell fade-up ${count === 0 ? "empty" : ""}" data-nav="month" data-month="${m}">
+          <div class="m-num">${m}월</div>
+          <div class="m-count">${count > 0 ? count + "개" : "-"}</div>
+        </div>`);
+      }
+      archiveViewEl.innerHTML = `<div class="month-grid">${cells.join("")}</div>`;
+
+    }else if(archiveState.view === "days"){
+      archiveBreadcrumb.innerHTML = `
+        <button type="button" class="crumb-back" data-nav="months">← 월 선택</button>
+        <span class="crumb-current">${archiveState.year}년 ${archiveState.month}월</span>`;
+      const list = entriesForYearMonth(archiveState.year, archiveState.month);
+      if(list.length === 0){
+        archiveViewEl.innerHTML = `<div class="empty-state fade-up">이 달에는 아직 기록이 없어요.<br>오늘 해준이의 이야기를 남겨보세요! 🌱</div>`;
+      }else{
+        const wrap = document.createElement("div");
+        wrap.className = "entries-list";
+        list.forEach(entry => wrap.appendChild(buildEntryCard(entry)));
+        archiveViewEl.innerHTML = "";
+        archiveViewEl.appendChild(wrap);
+      }
+    }
+
+    observeFadeUps();
+  }
+
+  async function deleteEntry(id){
+    try{
+      await dbDeleteEntry(id);
+      entries = entries.filter(en => en.id !== id);
+      renderArchive();
+      showToast("기록을 삭제했어요.");
+    }catch(err){
+      console.error(err);
+      alert("삭제 중 문제가 발생했어요.");
+    }
+  }
+
+  /* ================= Page switching ================= */
+  function switchPage(name){
+    document.getElementById("page-home").hidden = (name !== "home");
+    document.getElementById("page-archive").hidden = (name !== "archive");
+    document.querySelectorAll(".nav-link").forEach(btn => btn.classList.toggle("active", btn.dataset.page === name));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if(name === "archive") renderArchive();
+  }
+
+  /* ================= Lightbox ================= */
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const lightboxClose = document.getElementById("lightbox-close");
+
+  function openLightbox(src){
+    lightboxImg.src = src;
+    lightbox.classList.add("open");
+  }
+  function closeLightbox(){
+    lightbox.classList.remove("open");
+    lightboxImg.src = "";
+  }
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => {
+    if(e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") closeLightbox();
+  });
+
+  /* ================= Global event delegation ================= */
+  document.addEventListener("click", (e) => {
+    const navBtn = e.target.closest(".nav-link");
+    if(navBtn){
+      switchPage(navBtn.dataset.page);
+      return;
+    }
+
+    const navEl = e.target.closest("[data-nav]");
+    if(navEl){
+      const nav = navEl.dataset.nav;
+      if(nav === "years"){
+        archiveState = { view: "years", year: null, month: null };
+      }else if(nav === "year"){
+        archiveState = { view: "months", year: Number(navEl.dataset.year), month: null };
+      }else if(nav === "months"){
+        archiveState = { view: "months", year: archiveState.year, month: null };
+      }else if(nav === "month"){
+        archiveState = { view: "days", year: archiveState.year, month: Number(navEl.dataset.month) };
+      }
+      renderArchive();
+      return;
+    }
+
+    const delBtn = e.target.closest('[data-action="delete"]');
+    if(delBtn){
+      const card = delBtn.closest(".entry-card");
+      const id = card.dataset.id;
+      if(confirm("이 기록을 삭제할까요?")){
+        deleteEntry(id);
+      }
+      return;
+    }
+
+    const badge = e.target.closest(".attach-badge");
+    if(badge){
+      badge.parentElement.classList.toggle("open");
+      return;
+    }
+
+    const img = e.target.closest(".lightbox-trigger");
+    if(img){
+      openLightbox(img.dataset.src);
+    }
+  });
+
+  document.addEventListener("submit", async (e) => {
+    const form = e.target.closest('[data-action="comment"]');
+    if(!form) return;
+    e.preventDefault();
+
+    const card = form.closest(".entry-card");
+    const id = card.dataset.id;
+    const nameInput = form.querySelector(".c-name-input");
+    const textInput = form.querySelector(".c-text-input");
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+    if(!name || !text) return;
+
+    const entry = entries.find(en => en.id === id);
+    if(!entry) return;
+    if(!entry.comments) entry.comments = [];
+    entry.comments.push({
+      name,
+      text,
+      date: new Date().toLocaleDateString("ko-KR", { month:"2-digit", day:"2-digit" })
+    });
+
+    try{
+      await dbPutEntry(entry);
+    }catch(err){
+      console.error(err);
+    }
+    renderArchive();
+  });
+
+  /* ================= Sticky header shadow ================= */
+  const header = document.getElementById("site-header");
+  window.addEventListener("scroll", () => {
+    header.classList.toggle("scrolled", window.scrollY > 10);
+  });
+
+  /* ================= Fade-up on scroll ================= */
+  let observer;
+  function observeFadeUps(){
+    if(!observer){
+      observer = new IntersectionObserver((items) => {
+        items.forEach(item => {
+          if(item.isIntersecting){
+            item.target.classList.add("in-view");
+            observer.unobserve(item.target);
+          }
+        });
+      }, { threshold: 0.12 });
+    }
+    document.querySelectorAll(".fade-up:not(.in-view)").forEach(el => observer.observe(el));
+  }
+
+  /* ================= Init ================= */
+  /* ================= Hero intro: auto-transition to the write form ================= */
+  function initHeroIntro(){
+    const heroEl = document.getElementById("hero");
+    const heroContent = document.getElementById("hero-content");
+    const skipBtn = document.getElementById("hero-skip");
+    let finished = false;
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    function unlockScroll(){
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+
+    function finishIntro(){
+      if(finished) return;
+      finished = true;
+      heroContent.classList.add("hero-exit");
+
+      setTimeout(() => {
+        const startHeight = heroEl.getBoundingClientRect().height;
+        heroEl.style.height = startHeight + "px";
+        heroEl.style.minHeight = startHeight + "px";
+        void heroEl.offsetHeight;
+        requestAnimationFrame(() => {
+          heroEl.style.height = "0px";
+          heroEl.style.minHeight = "0px";
+          heroEl.style.paddingTop = "0px";
+          heroEl.style.paddingBottom = "0px";
+        });
+        setTimeout(() => {
+          heroEl.hidden = true;
+          unlockScroll();
+        }, 950);
+      }, 700);
+    }
+
+    const timer = setTimeout(finishIntro, 3400);
+
+    skipBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      clearTimeout(timer);
+      finishIntro();
+    });
+  }
+
+  /* ================= Init ================= */
+  async function init(){
+    try{
+      entries = await dbGetAllEntries();
+    }catch(err){
+      console.error("기록을 불러오지 못했어요.", err);
+      entries = [];
+    }
+    observeFadeUps();
+    initHeroIntro();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
