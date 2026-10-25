@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>해준이의 성장과정</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
 <style>
   :root{
     --bg: #fffdfb;
@@ -217,6 +218,38 @@
     margin-bottom: 46px;
     font-size: 0.98rem;
   }
+
+  /* ---------- Section photo (above "새로운 기록 남기기") ---------- */
+  .section-photo{
+    position:relative;
+    width: min(300px, 72vw);
+    margin: 0 auto 34px;
+  }
+  .section-photo::before{
+    content:"";
+    position:absolute;
+    inset:-12px;
+    border-radius:30px;
+    background: conic-gradient(from 200deg, var(--pink), var(--yellow), var(--mint), var(--blue), var(--pink));
+    opacity:0.7;
+  }
+  .section-photo img{
+    position:relative;
+    width:100%;
+    height:auto;
+    border-radius:20px;
+    border: 6px solid #fff;
+    box-shadow: var(--shadow);
+  }
+  .section-photo .sparkle{
+    position:absolute;
+    font-size:1.5rem;
+    animation: float 6s ease-in-out infinite;
+    user-select:none;
+    pointer-events:none;
+  }
+  .section-photo .s1{ top:-18px; right:-30px; }
+  .section-photo .s2{ bottom:24px; left:-34px; font-size:1.2rem; animation-delay:1.4s; }
 
   /* ---------- Add Entry Form ---------- */
   .add-entry{ background: var(--bg-soft); }
@@ -631,6 +664,80 @@
     .year-card{ padding:26px 14px; }
     .hero-photo-wrap{ width:200px; height:200px; }
   }
+
+  /* ===== 로그인 / 동기화 ===== */
+  .auth-link{ margin-left:4px; }
+  .auth-link.is-in{ color: var(--pink-deep); }
+
+  .login-backdrop{
+    position:fixed; inset:0; z-index:1200;
+    background: rgba(74,64,56,0.45);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .login-backdrop[hidden]{ display:none; }
+  .login-box{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 30px 26px;
+    width:100%; max-width:360px;
+    box-shadow: var(--shadow);
+  }
+  .login-box h4{ margin:0 0 6px; font-size:1.15rem; color:var(--ink); }
+  .login-box p{ margin:0 0 18px; font-size:0.88rem; color:var(--ink-soft); line-height:1.6; }
+  .login-box input{
+    width:100%; box-sizing:border-box;
+    padding:12px 14px; margin-bottom:10px;
+    border:1.5px solid #f0dfe4; border-radius:12px;
+    font-family:inherit; font-size:0.95rem; color:var(--ink);
+  }
+  .login-box input:focus{ outline:none; border-color:var(--pink-deep); }
+  .login-actions{ display:flex; gap:8px; margin-top:6px; }
+  .login-actions button{
+    flex:1; padding:12px; border:none; border-radius:12px;
+    font-family:inherit; font-size:0.93rem; cursor:pointer;
+  }
+  .btn-primary{ background:var(--pink-deep); color:#fff; }
+  .btn-ghost{ background:#f6f0ec; color:var(--ink-soft); }
+  .login-error{ color:#c0392b; font-size:0.85rem; margin:4px 0 0; min-height:1.1em; }
+
+  .locked-note{
+    background:#fff7f2;
+    border:1.5px dashed #f0d6cf;
+    border-radius:18px;
+    padding:24px 20px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    line-height:1.7;
+  }
+  .locked-note[hidden]{ display:none; }
+  .locked-note button{
+    margin-top:14px; padding:11px 24px;
+    background:var(--pink-deep); color:#fff;
+    border:none; border-radius:999px;
+    font-family:inherit; font-size:0.92rem; cursor:pointer;
+  }
+
+  .migrate-bar{
+    margin: 0 auto 22px;
+    max-width: 760px;
+    background:#fffbe9;
+    border:1.5px solid #f3e4b0;
+    border-radius:16px;
+    padding:16px 20px;
+    font-size:0.92rem;
+    color:#8a7232;
+    line-height:1.6;
+  }
+  .migrate-bar[hidden]{ display:none; }
+  .migrate-bar button{
+    margin-top:10px; padding:10px 20px;
+    background:#e0a93b; color:#fff;
+    border:none; border-radius:999px;
+    font-family:inherit; font-size:0.9rem; cursor:pointer;
+  }
+  .migrate-bar button:disabled{ opacity:0.6; cursor:default; }
 </style>
 </head>
 <body>
@@ -641,6 +748,7 @@
     <nav class="site-nav">
       <button type="button" class="nav-link active" data-page="home">홈</button>
       <button type="button" class="nav-link" data-page="archive">기록보관함</button>
+      <button type="button" class="nav-link auth-link" id="auth-btn">로그인</button>
     </nav>
   </div>
 </header>
@@ -664,8 +772,24 @@
 
   <section id="add-entry" class="add-entry">
     <div class="section-inner">
+      <div class="section-photo fade-up">
+        <img src="haejun-entry.jpg" alt="엄마 아빠가 높이 안아 올린 해준이" width="800" height="1200" loading="lazy">
+        <span class="sparkle s1">✨</span>
+        <span class="sparkle s2">🌱</span>
+      </div>
       <h3 class="section-title fade-up">새로운 기록 남기기</h3>
       <p class="section-sub fade-up">매일매일, 해준이의 순간을 날짜별로 차곡차곡 남겨보세요. 저장하면 기록보관함에 바로 반영돼요.</p>
+
+      <div class="migrate-bar fade-up" id="migrate-bar" hidden>
+        <strong>📦 이 기기에만 저장된 예전 기록이 <span id="migrate-count">0</span>개 있어요.</strong><br>
+        아래 버튼을 누르면 서버로 옮겨져서, 다른 기기에서도 보입니다.
+        <br><button type="button" id="migrate-btn">기록 옮기기</button>
+      </div>
+
+      <div class="locked-note fade-up" id="locked-note" hidden>
+        🔒 일기를 쓰려면 로그인해 주세요.
+        <br><button type="button" id="locked-login-btn">로그인하기</button>
+      </div>
 
       <form id="entry-form" class="entry-form fade-up">
         <div class="form-row">
@@ -734,62 +858,146 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="login-backdrop" id="login-backdrop" hidden>
+  <div class="login-box">
+    <h4>🔐 로그인</h4>
+    <p>일기를 쓰거나 사진을 올리려면 로그인이 필요해요.<br>구경만 하실 분은 그냥 닫으셔도 됩니다.</p>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="이메일" autocomplete="username" required>
+      <input type="password" id="login-password" placeholder="비밀번호" autocomplete="current-password" required>
+      <p class="login-error" id="login-error"></p>
+      <div class="login-actions">
+        <button type="button" class="btn-ghost" id="login-cancel">닫기</button>
+        <button type="submit" class="btn-primary" id="login-submit">로그인</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
 
-  /* ================= IndexedDB storage layer ================= */
-  const DB_NAME = "haejunDiaryDB";
-  const DB_VERSION = 1;
-  const STORE_NAME = "entries";
-  let dbPromise = null;
+  /* ================= Supabase 연결 ================= */
+  const SUPABASE_URL  = "https://fvexrjssywmhbbyvvpkm.supabase.co";
+  const SUPABASE_KEY  = "sb_publishable_MYgUfFW1TlDApsJPyYM8nA_NycoFsph";
+  const PHOTO_BUCKET  = "photos";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  function getDB(){
-    if(dbPromise) return dbPromise;
-    dbPromise = new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = (e) => {
-        const db = e.target.result;
-        if(!db.objectStoreNames.contains(STORE_NAME)){
-          db.createObjectStore(STORE_NAME, { keyPath: "id" });
-        }
-      };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-    return dbPromise;
+  function photoUrl(path){
+    return path ? SUPABASE_URL + "/storage/v1/object/public/" + PHOTO_BUCKET + "/" + path : null;
+  }
+
+  function commentDate(iso){
+    return new Date(iso).toLocaleDateString("ko-KR", { month:"2-digit", day:"2-digit" });
+  }
+
+  function rowToEntry(row){
+    const paths = row.attachment_paths || [];
+    return {
+      id: row.id,
+      date: row.date,
+      title: row.title || "",
+      text: row.body || "",
+      coverPath: row.cover_path || null,
+      attachmentPaths: paths,
+      cover: photoUrl(row.cover_path),
+      attachments: paths.map(photoUrl),
+      comments: (row.comments || [])
+        .slice()
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+        .map(c => ({ id: c.id, name: c.name, text: c.body, date: commentDate(c.created_at) }))
+    };
   }
 
   async function dbGetAllEntries(){
-    const db = await getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readonly");
-      const req = tx.objectStore(STORE_NAME).getAll();
-      req.onsuccess = () => resolve(req.result || []);
-      req.onerror = () => reject(req.error);
-    });
+    const { data, error } = await sb
+      .from("entries")
+      .select("*, comments(*)")
+      .order("date", { ascending: false })
+      .order("created_at", { ascending: false });
+    if(error) throw error;
+    return (data || []).map(rowToEntry);
   }
 
-  async function dbPutEntry(entry){
-    const db = await getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).put(entry);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
+  async function uploadPhoto(blob){
+    const ext  = (blob.type === "image/png") ? "png" : "jpg";
+    const path = new Date().getFullYear() + "/" + Date.now() + "-" +
+                 Math.random().toString(36).slice(2, 8) + "." + ext;
+    const { error } = await sb.storage.from(PHOTO_BUCKET).upload(path, blob, {
+      contentType: blob.type || "image/jpeg",
+      upsert: false
     });
+    if(error) throw error;
+    return path;
+  }
+
+  async function dbSaveEntry(entry){
+    const { error } = await sb.from("entries").upsert({
+      id:               entry.id,
+      date:             entry.date,
+      title:            entry.title,
+      body:             entry.text,
+      cover_path:       entry.coverPath,
+      attachment_paths: entry.attachmentPaths || []
+    });
+    if(error) throw error;
   }
 
   async function dbDeleteEntry(id){
-    const db = await getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).delete(id);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
+    const entry = entries.find(en => en.id === id);
+    const paths = [];
+    if(entry){
+      if(entry.coverPath) paths.push(entry.coverPath);
+      (entry.attachmentPaths || []).forEach(p => paths.push(p));
+    }
+    const { error } = await sb.from("entries").delete().eq("id", id);
+    if(error) throw error;
+    if(paths.length){
+      try{
+        await sb.storage.from(PHOTO_BUCKET).remove(paths);
+      }catch(err){
+        console.warn("사진 파일 삭제 실패", err);
+      }
+    }
   }
 
+  async function dbAddComment(entryId, name, text){
+    const { data, error } = await sb.from("comments")
+      .insert({ entry_id: entryId, name: name, body: text })
+      .select()
+      .single();
+    if(error) throw error;
+    return { id: data.id, name: data.name, text: data.body, date: commentDate(data.created_at) };
+  }
+
+  /* ===== 예전 IndexedDB 기록 (기기 안에만 있던 것 → 서버 이전용) ===== */
+  const IDB_NAME  = "haejunDiaryDB";
+  const IDB_STORE = "entries";
+
+  function idbGetAllEntries(){
+    return new Promise((resolve) => {
+      let req;
+      try{
+        req = indexedDB.open(IDB_NAME);
+      }catch(err){
+        resolve([]); return;
+      }
+      req.onerror = () => resolve([]);
+      req.onsuccess = () => {
+        const db = req.result;
+        if(!db.objectStoreNames.contains(IDB_STORE)){ resolve([]); return; }
+        try{
+          const tx  = db.transaction(IDB_STORE, "readonly");
+          const all = tx.objectStore(IDB_STORE).getAll();
+          all.onsuccess = () => resolve(all.result || []);
+          all.onerror   = () => resolve([]);
+        }catch(err){
+          resolve([]);
+        }
+      };
+    });
+  }
   /* ================= Image compression ================= */
   function compressImage(file, maxDim, quality){
     maxDim = maxDim || 1600;
@@ -834,6 +1042,7 @@
 
   /* ================= App state ================= */
   let entries = [];
+  let currentUser = null;
   let archiveState = { view: "years", year: null, month: null };
 
   const dateInput = document.getElementById("entry-date");
@@ -960,22 +1169,38 @@
     const date = dateInput.value;
     if(!date){ alert("날짜를 선택해주세요."); return; }
 
+    if(!currentUser){
+      showToast("먼저 로그인해 주세요.");
+      openLogin();
+      return;
+    }
+
     const submitBtn = entryForm.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.textContent = "저장 중...";
+    submitBtn.textContent = "사진 올리는 중...";
 
     try{
+      const coverPath = pendingCoverBlob ? await uploadPhoto(pendingCoverBlob) : null;
+      const attachmentPaths = [];
+      for(const blob of pendingAttachmentBlobs){
+        attachmentPaths.push(await uploadPhoto(blob));
+      }
+
+      submitBtn.textContent = "저장 중...";
+
       const newEntry = {
         id: "e-" + Date.now(),
         date: date,
         title: document.getElementById("entry-title").value.trim() || "오늘, 해준이의 이야기",
         text: document.getElementById("entry-text").value.trim(),
-        cover: pendingCoverBlob,
-        attachments: pendingAttachmentBlobs.slice(),
+        coverPath: coverPath,
+        attachmentPaths: attachmentPaths,
+        cover: photoUrl(coverPath),
+        attachments: attachmentPaths.map(photoUrl),
         comments: []
       };
 
-      await dbPutEntry(newEntry);
+      await dbSaveEntry(newEntry);
       entries.unshift(newEntry);
       resetForm();
 
@@ -995,17 +1220,10 @@
   /* ================= Archive: years -> months -> days ================= */
   const archiveBreadcrumb = document.getElementById("archive-breadcrumb");
   const archiveViewEl = document.getElementById("archive-view");
-  let archiveObjectUrls = [];
-
-  function releaseArchiveUrls(){
-    archiveObjectUrls.forEach(u => URL.revokeObjectURL(u));
-    archiveObjectUrls = [];
-  }
-  function archiveBlobUrl(blob){
-    if(!blob) return null;
-    const url = URL.createObjectURL(blob);
-    archiveObjectUrls.push(url);
-    return url;
+  /* 사진은 이제 Supabase가 주는 주소(URL)라서 따로 해제할 필요가 없습니다. */
+  function releaseArchiveUrls(){ /* no-op */ }
+  function archiveBlobUrl(url){
+    return url || null;
   }
 
   function entryYearMonth(entry){
@@ -1075,7 +1293,7 @@
       <div class="entry-body">
         <div class="entry-header">
           <h4 class="entry-title">${escapeHtml(entry.title)}</h4>
-          <button class="entry-delete" data-action="delete">삭제</button>
+          ${currentUser ? `<button class="entry-delete" data-action="delete">삭제</button>` : ""}
         </div>
         <p class="entry-text">${escapeHtml(entry.text)}</p>
         ${coverHtml}
@@ -1244,16 +1462,14 @@
     const entry = entries.find(en => en.id === id);
     if(!entry) return;
     if(!entry.comments) entry.comments = [];
-    entry.comments.push({
-      name,
-      text,
-      date: new Date().toLocaleDateString("ko-KR", { month:"2-digit", day:"2-digit" })
-    });
 
     try{
-      await dbPutEntry(entry);
+      const saved = await dbAddComment(id, name, text);
+      entry.comments.push(saved);
     }catch(err){
       console.error(err);
+      showToast("댓글 저장에 실패했어요.");
+      return;
     }
     renderArchive();
   });
@@ -1329,13 +1545,170 @@
   }
 
   /* ================= Init ================= */
+  /* ================= 로그인 ================= */
+  const authBtn        = document.getElementById("auth-btn");
+  const loginBackdrop  = document.getElementById("login-backdrop");
+  const loginForm      = document.getElementById("login-form");
+  const loginEmail     = document.getElementById("login-email");
+  const loginPassword  = document.getElementById("login-password");
+  const loginError     = document.getElementById("login-error");
+  const loginSubmit    = document.getElementById("login-submit");
+  const lockedNote     = document.getElementById("locked-note");
+
+  function openLogin(){
+    loginError.textContent = "";
+    loginPassword.value = "";
+    loginBackdrop.hidden = false;
+    loginEmail.focus();
+  }
+  function closeLogin(){
+    loginBackdrop.hidden = true;
+  }
+
+  function applyAuthState(){
+    const inUser = !!currentUser;
+    authBtn.textContent = inUser ? "로그아웃" : "로그인";
+    authBtn.classList.toggle("is-in", inUser);
+    entryForm.hidden  = !inUser;
+    lockedNote.hidden = inUser;
+    refreshMigrateBar();
+  }
+
+  authBtn.addEventListener("click", async () => {
+    if(currentUser){
+      await sb.auth.signOut();
+      currentUser = null;
+      applyAuthState();
+      showToast("로그아웃했어요.");
+    }else{
+      openLogin();
+    }
+  });
+
+  document.getElementById("locked-login-btn").addEventListener("click", openLogin);
+  document.getElementById("login-cancel").addEventListener("click", closeLogin);
+  loginBackdrop.addEventListener("click", (e) => {
+    if(e.target === loginBackdrop) closeLogin();
+  });
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginError.textContent = "";
+    loginSubmit.disabled = true;
+    loginSubmit.textContent = "확인 중...";
+    try{
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: loginEmail.value.trim(),
+        password: loginPassword.value
+      });
+      if(error) throw error;
+      currentUser = data.user;
+      closeLogin();
+      applyAuthState();
+      showToast("로그인했어요. 이제 기록을 남길 수 있어요 🌱");
+    }catch(err){
+      console.error(err);
+      loginError.textContent = "이메일 또는 비밀번호가 맞지 않아요.";
+    }finally{
+      loginSubmit.disabled = false;
+      loginSubmit.textContent = "로그인";
+    }
+  });
+
+  /* ================= 예전 기록 서버로 옮기기 ================= */
+  const migrateBar   = document.getElementById("migrate-bar");
+  const migrateBtn   = document.getElementById("migrate-btn");
+  const migrateCount = document.getElementById("migrate-count");
+  let pendingLegacy  = [];
+
+  function refreshMigrateBar(){
+    migrateBar.hidden = !(currentUser && pendingLegacy.length > 0);
+    migrateCount.textContent = pendingLegacy.length;
+  }
+
+  async function scanLegacy(){
+    const legacy = await idbGetAllEntries();
+    const existing = new Set(entries.map(en => en.id));
+    pendingLegacy = legacy.filter(en => !existing.has(en.id));
+    refreshMigrateBar();
+  }
+
+  migrateBtn.addEventListener("click", async () => {
+    if(!currentUser || pendingLegacy.length === 0) return;
+    migrateBtn.disabled = true;
+    let done = 0, failed = 0;
+
+    for(const old of pendingLegacy){
+      try{
+        migrateBtn.textContent = "옮기는 중... (" + (done + failed + 1) + "/" + pendingLegacy.length + ")";
+
+        const coverPath = old.cover ? await uploadPhoto(old.cover) : null;
+        const attachmentPaths = [];
+        for(const blob of (old.attachments || [])){
+          attachmentPaths.push(await uploadPhoto(blob));
+        }
+
+        const moved = {
+          id: old.id,
+          date: old.date,
+          title: old.title || "오늘, 해준이의 이야기",
+          text: old.text || "",
+          coverPath: coverPath,
+          attachmentPaths: attachmentPaths,
+          cover: photoUrl(coverPath),
+          attachments: attachmentPaths.map(photoUrl),
+          comments: []
+        };
+        await dbSaveEntry(moved);
+
+        for(const c of (old.comments || [])){
+          try{
+            moved.comments.push(await dbAddComment(old.id, c.name, c.text));
+          }catch(err){
+            console.warn("댓글 이전 실패", err);
+          }
+        }
+
+        entries.unshift(moved);
+        done++;
+      }catch(err){
+        console.error("기록 이전 실패", old && old.id, err);
+        failed++;
+      }
+    }
+
+    migrateBtn.disabled = false;
+    migrateBtn.textContent = "기록 옮기기";
+    await scanLegacy();
+    renderArchive();
+
+    if(failed === 0){
+      showToast(done + "개의 기록을 모두 옮겼어요! 🎉");
+    }else{
+      showToast(done + "개 성공, " + failed + "개 실패했어요.");
+    }
+  });
+
+  /* ================= Init ================= */
   async function init(){
+    try{
+      const { data } = await sb.auth.getSession();
+      currentUser = data.session ? data.session.user : null;
+    }catch(err){
+      console.error("로그인 상태를 확인하지 못했어요.", err);
+      currentUser = null;
+    }
+
     try{
       entries = await dbGetAllEntries();
     }catch(err){
       console.error("기록을 불러오지 못했어요.", err);
       entries = [];
+      showToast("기록을 불러오지 못했어요. 인터넷 연결을 확인해주세요.");
     }
+
+    applyAuthState();
+    await scanLegacy();
     observeFadeUps();
     initHeroIntro();
   }
